@@ -1,0 +1,7 @@
+{
+  "name": "m3uhub",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
