@@ -1,0 +1,18 @@
+<ion-menu side="start" menuId="m1" contentId="main" id="menu" type="reveal" [disabled]="!isLogged"
+  style="background-color: #0d2fab; color: #0d2fab;">
+  <ion-content>
+    <ion-list>
+      <ion-menu-toggle>
+        <ion-item button [routerLink]="['/homepage']">
+          <ion-label>Inicio</ion-label>
+        </ion-item>
+        <ion-item button [routerLink]="['/playlist']">
+          <ion-label>Gestionar Playlist</ion-label>
+        </ion-item>
+        <ion-item button (click)="logout()">
+          <ion-label>Cerrar de sesión</ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+    </ion-list>
+  </ion-content>
+</ion-menu>
