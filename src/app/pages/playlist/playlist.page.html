@@ -17,15 +17,15 @@
   </ion-header>
 
   <ion-list *ngIf="playlistsList">
-    <ion-item *ngFor="let playlist of playlistsList;" >
-      <ion-card>
-        <ion-card-content class="ion-text-center">
-          <h1>{{playlist.name}}</h1>
-          <div class="actions-buttons ion-justify-content-center">
-            <ion-button fill="clear" (click)="selectPlaylist(playlist)">Ver</ion-button>
-            <ion-button fill="clear" (click)="deletePlaylist(playlist)">Eliminar</ion-button>
-            <ion-button fill="clear" (click)="presentEditPlaylistPopover(playlist)">Editar</ion-button>
-          </div>
+    <ion-item *ngFor="let playlist of playlistsList;">
+      <ion-card style="width: 100%; background-color: rgb(28, 54, 71);">
+        <ion-card-header>
+          <ion-card-title>{{playlist.name}}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content class="center">
+          <ion-button fill="clear" (click)="selectPlaylist(playlist)">Ver</ion-button>
+          <ion-button fill="clear" (click)="deletePlaylist(playlist)">Eliminar</ion-button>
+          <ion-button fill="clear" (click)="presentEditPlaylistPopover(playlist)">Editar</ion-button>
         </ion-card-content>
       </ion-card>
     </ion-item>

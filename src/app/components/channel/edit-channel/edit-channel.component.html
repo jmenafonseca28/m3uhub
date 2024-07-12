@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Editar Canal</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="ion-padding">
+    <ion-item>
+      <ion-label position="floating">Titulo del Canal <ion-icon name="alert-circle-outline"></ion-icon></ion-label>
+      <ion-input type="text" [(ngModel)]="channel.title"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Url del Canal <ion-icon name="alert-circle-outline"></ion-icon></ion-label>
+      <ion-textarea [(ngModel)]="channel.url"></ion-textarea>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Nombre del Canal</ion-label>
+      <ion-textarea [(ngModel)]="channel.tvgName"></ion-textarea>
+
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">N&uacute;mero del Canal</ion-label>
+      <ion-input type="text" [(ngModel)]="channel.tvgChannelNumber"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Url del logo del Canal</ion-label>
+      <ion-input type="text" [(ngModel)]="channel.logo"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Grupo del Canal</ion-label>
+      <ion-input type="text" [(ngModel)]="channel.groupTitle"></ion-input>
+    </ion-item>
+    <ion-button class="custom-button" (click)="closePopover()">Cerrar</ion-button>
+    <ion-button class="custom-button" (click)="onSubmit()">Editar</ion-button>
+
+    <ion-alert header="Ops.." subHeader="Parece que algo salió mal. Inténtalo de nuevo." [message]="errorMessage"
+      [buttons]="alertButtons" [isOpen]="isAlertOpen" (didDismiss)="setOpen(false)"></ion-alert>
+  </div>
+  <ion-toast [isOpen]="isOpenToast" [message]="messageToast" [duration]="5000" (didDismiss)="toggleToast()"></ion-toast>
+</ion-content>

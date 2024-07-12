@@ -46,13 +46,18 @@ export class CreatePlaylistComponent implements OnInit {
   onSubmit() {
     if (!this.user.token) return;
 
+    if (!this.playlist.name || this.playlist.name.trim() === '') {
+      this.showMessage('El nombre de la playlist es requerido');
+      return;
+    }
+
     this.playlistService.createPlaylist(this.playlist, this.user.token).subscribe({
       next: (response) => {
         this.closePopover();
       },
       error: (error) => {
         this.closePopover();
-        this.showMessage(error.message);
+        this.showMessage('Algo salió mal');
       }
     });
   }

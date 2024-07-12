@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonMenuButton, IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonList, IonItem, IonCard, IonCardContent, IonButton, IonFab, IonFabButton, IonIcon, IonAlert } from '@ionic/angular/standalone';
+import { IonMenuButton, IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonList, IonItem, IonCard, IonCardContent, IonButton, IonFab, IonFabButton, IonIcon, IonAlert, IonCardHeader, IonCardTitle } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { add, lockClosedOutline } from 'ionicons/icons';
 import { Playlist } from 'src/app/models/IPlaylist.model';
@@ -18,7 +18,7 @@ import { EditPlaylistComponent } from 'src/app/components/playlist/edit-playlist
   templateUrl: './playlist.page.html',
   styleUrls: ['./playlist.page.scss'],
   standalone: true,
-  imports: [IonAlert, IonIcon, IonFabButton, IonFab, IonButton, IonCardContent,
+  imports: [IonCardTitle, IonCardHeader, IonAlert, IonIcon, IonFabButton, IonFab, IonButton, IonCardContent,
     IonCard, IonItem, IonList, IonButtons, IonContent, IonHeader, IonTitle,
     IonToolbar, CommonModule, FormsModule, IonMenuButton]
 })
@@ -87,7 +87,7 @@ export class PlaylistPage implements OnInit {
   }
 
   selectPlaylist(playlist: Playlist) {
-    this.router.navigate(['/channel/' + playlist.id]);
+    this.router.navigate(['/channel-list/' + playlist.id]);
   }
 
   deletePlaylist(playlist: Playlist) {

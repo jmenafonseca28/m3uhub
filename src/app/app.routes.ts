@@ -17,5 +17,13 @@ export const routes: Routes = [
   },
   {
     path: 'playlist', loadComponent: () => import('./pages/playlist/playlist.page').then(m => m.PlaylistPage)
+  },
+  {
+    path: 'channel-list/:id',
+    loadComponent: () => import('./pages/channel-list/channel-list.page').then( m => m.ChannelListPage)
+  },
+  {
+    path: 'channel-view',
+    loadComponent: () => import('./pages/channel-view/channel-view.page').then( m => m.ChannelViewPage)
   }
 ];

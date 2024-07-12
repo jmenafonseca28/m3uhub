@@ -1,0 +1,95 @@
+<ion-header [translucent]="true">
+  <ion-toolbar class="neon">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Canales</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Canales</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Todos los canales disponibles</ion-card-title>
+      <ion-card-subtitle>{{user.name+' '+user.lastName}}</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-progress-bar *ngIf="isCharging" type="indeterminate" [color]="colors[currentColorIndex]"></ion-progress-bar>
+
+      <ion-button fill="outline" (click)="onComeBack()"><ion-icon slot="icon-only"
+          name="arrow-back-outline"></ion-icon></ion-button>
+      <ion-list>
+        <ion-item>
+          <ion-label>Filtrar por Grupo</ion-label>
+          <ion-select [(ngModel)]="selectedGroups" multiple="true" (ionChange)="filterChannels()">
+            <ion-select-option *ngFor="let group of groups" [value]="group">{{ group }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+
+      <ion-list>
+        <ion-reorder-group [disabled]="isDisabled" (ionItemReorder)="handleReorder($any($event))">
+          <ion-item
+            *ngFor="let channelInfo of filteredChannels;"><!-- [button]="true" (click)="openChannel(channelInfo)" -->
+            <ion-thumbnail slot="start">
+              <img alt="Logo" src="{{channelInfo.logo}}" />
+            </ion-thumbnail>
+            <ion-label>{{channelInfo.title}}</ion-label>
+            <ion-button slot="end" (click)="openChannel(channelInfo)">Ver</ion-button>
+            <ion-button slot="end" (click)="setChannelToDelete(channelInfo)" *ngIf="isDeleting"><ion-icon
+                name="trash-outline"></ion-icon></ion-button>
+            <ion-reorder slot="end"></ion-reorder>
+          </ion-item>
+        </ion-reorder-group>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button>
+      <ion-icon name="chevron-up-circle"></ion-icon>
+    </ion-fab-button>
+
+    <ion-fab-list side="top">
+      <ion-fab-button (click)="saveOrder()"><!-- color="success" -->
+        <ion-icon name="save-outline"></ion-icon>
+      </ion-fab-button>
+
+      <ion-fab-button (click)="toggleReorder()"><!-- color="tertiary" -->
+        <ion-icon name="reorder-four-outline"></ion-icon>
+      </ion-fab-button>
+
+      <ion-fab-button (click)="toggleDelete()"><!-- color="danger" -->
+        <ion-icon name="trash-outline"></ion-icon>
+      </ion-fab-button>
+
+      <ion-fab-button (click)="downloadPlayList()"><!-- color="warning" -->
+        <ion-icon name="download-outline"></ion-icon>
+      </ion-fab-button>
+
+      <ion-fab-button (click)="presentPopover()"><!-- color="primary" -->
+        <ion-icon name="add-circle-outline"></ion-icon>
+      </ion-fab-button>
+
+      <ion-fab-button (click)="selectFile()"><!-- color="danger" -->
+        <ion-icon name="cloud-upload-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+
+  <input type="file" #fileInput style="display: none" (change)="onFileSelected($event)">
+
+  <ion-toast [isOpen]="isOpenToast" [message]="messageToast" [duration]="5000" (didDismiss)="toggleToast()"></ion-toast>
+
+  <ion-alert header="¿Seguro?" subHeader="Esta acci&oacute;n es irreversible"
+    message="Se eliminara el canal {{channelToDelete.title}}. ¿Est&aacute;s seguro de que deseas eliminarlo?"
+    [buttons]="alertDeleteButtons" [isOpen]="isDeletingAlert" (didDismiss)="toggleDelete()"></ion-alert>
+</ion-content>
