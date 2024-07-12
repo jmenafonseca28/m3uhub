@@ -1,0 +1,47 @@
+<ion-header [translucent]="true">
+  <ion-toolbar class="neon">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Playlist</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="custom-content" [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Playlist</ion-title>
+    </ion-toolbar>
+    <ion-title size="large">Playlist</ion-title>
+
+  </ion-header>
+
+  <ion-list *ngIf="playlistsList">
+    <ion-item *ngFor="let playlist of playlistsList;" >
+      <ion-card>
+        <ion-card-content class="ion-text-center">
+          <h1>{{playlist.name}}</h1>
+          <div class="actions-buttons ion-justify-content-center">
+            <ion-button fill="clear" (click)="selectPlaylist(playlist)">Ver</ion-button>
+            <ion-button fill="clear" (click)="deletePlaylist(playlist)">Eliminar</ion-button>
+            <ion-button fill="clear" (click)="presentEditPlaylistPopover(playlist)">Editar</ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-item>
+  </ion-list>
+
+  <ion-fab slot="fixed" horizontal="end" vertical="bottom">
+    <ion-fab-button (click)="presentCreatePlaylistPopover()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-alert header="Ops.." subHeader="Parece que algo salió mal. Inténtalo de nuevo." [message]="errorMessage"
+    [buttons]="alertButtons" [isOpen]="isAlertOpen" (didDismiss)="setOpen(false)"></ion-alert>
+
+  <ion-alert header="¿Seguro?" subHeader="Esta acci&oacute;n es irreversible"
+    message="Se eliminaran los canales asociados a {{playListToDelete.name}}. ¿Est&aacute;s seguro de que deseas eliminar esta playlist?"
+    [buttons]="deletePlaylistButtons" [isOpen]="isDeletePlaylistOpen"
+    (didDismiss)="setDeletePlaylistOpen(false)"></ion-alert>
+</ion-content>

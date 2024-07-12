@@ -1,0 +1,19 @@
+<div class="dark-theme">
+  <ion-header class="neon-border-bottom">
+    <ion-toolbar>
+      <ion-title class="text-white">Crear Playlist</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <div>
+    <div class="custom-form">
+      <ion-item class="custom-item text-white">
+        <ion-label position="floating" class="text-white">Nombre de la Playlist</ion-label>
+        <ion-input type="text" [(ngModel)]="playlist.name"></ion-input>
+      </ion-item>
+        <ion-button class="custom-button" expand="block" (click)="closePopover()">Cerrar</ion-button>
+        <ion-button class="custom-button" expand="block" (click)="onSubmit()">Guardar</ion-button>
+    </div>
+  </div>
+  <ion-alert header="Ops.." subHeader="Parece que algo salió mal. Inténtalo de nuevo." [message]="errorMessage"
+    [buttons]="alertButtons" [isOpen]="isAlertOpen" (didDismiss)="setOpen(false)"></ion-alert>
+</div>

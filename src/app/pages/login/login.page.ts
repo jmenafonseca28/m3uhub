@@ -42,8 +42,7 @@ export class LoginPage {
   public async login(): Promise<void> {
 
     if (!this.validateInputs()) {
-      this.errorMessage = 'Por favor, rellene todos los campos';
-      this.setOpen(true);
+      this.showMessage('Por favor, rellene todos los campos');
       return;
     }
 
@@ -52,8 +51,7 @@ export class LoginPage {
     this.authService.login(this.user).subscribe({
       next: async (response) => {
         if (!response.success) {
-          this.errorMessage = response.message;
-          this.setOpen(true);
+          this.showMessage(response.message);
           return;
         }
 
@@ -61,11 +59,15 @@ export class LoginPage {
         this.router.navigate(['/homepage']);
       },
       error: (error) => {
-        this.errorMessage = 'Usuario o contraseña incorrectos';
-        this.setOpen(true);
+        this.showMessage('Usuario o contraseña incorrectos');
       }
     });
     loadingIndicator.dismiss();
+  }
+
+  private showMessage(message: string) {
+    this.errorMessage = message;
+    this.setOpen(true);
   }
 
   private validateInputs() {
