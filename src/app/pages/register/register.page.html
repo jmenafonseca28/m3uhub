@@ -1,0 +1,56 @@
+<div class="page">
+  <ion-header [translucent]="true">
+    <ion-toolbar>
+      <ion-title>Registro de usuario</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content class="form" [fullscreen]="true">
+    <ion-header collapse="condense">
+      <ion-toolbar>
+        <ion-title size="large">Registrarse</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-card class="constent">
+      <ion-card-header class="header">
+        <div class="icon"></div>
+        <ion-card-title class="color2">Registro</ion-card-title>
+        <ion-card-subtitle class="color2">Ingrese sus datos</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content class="color4">
+        <div class="ion-padding">
+          <ion-item class="">
+            <ion-label position="floating"><ion-icon name="heart" aria-hidden="true"></ion-icon>Nombre</ion-label>
+            <ion-input type="text" [(ngModel)]="user.name"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Apellido</ion-label>
+            <ion-input type="text" [(ngModel)]="user.lastName"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Correo electr&oacute;nico</ion-label>
+            <ion-input type="email" [(ngModel)]="user.email" aria-required="true"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Contrase&ntilde;a</ion-label>
+            <ion-input type="password" [(ngModel)]="user.password"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Confirmar contrase&ntilde;a</ion-label>
+            <ion-input type="password" [(ngModel)]="user.confirmPassword"></ion-input>
+          </ion-item>
+
+          <ion-button expand="block" color="primary" (click)="register()">Registrarse</ion-button>
+          <ion-button expand="block" color="primary" [routerLink]="['/login']">Atrás</ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+    <ion-alert header="Ops.." subHeader="Parece que algo salió mal. Inténtalo de nuevo." [message]="errorMessage"
+      [buttons]="alertButtons" [isOpen]="isAlertOpen" (didDismiss)="setOpen(false)"></ion-alert>
+  </ion-content>
+</div>
