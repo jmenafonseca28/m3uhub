@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { personAddSharp, personSharp } from 'ionicons/icons';
 import { Storage } from '@ionic/storage';
+import { emptyTexts } from 'src/app/utils/Logic';
 
 @Component({
   selector: 'app-login',
@@ -52,17 +53,19 @@ export class LoginPage {
       next: async (response) => {
         if (!response.success) {
           this.showMessage(response.message);
+          loadingIndicator.dismiss();
           return;
         }
 
         await this.storage.set('user', response.data);
+        loadingIndicator.dismiss();
         this.router.navigate(['/homepage']);
       },
       error: (error) => {
+        loadingIndicator.dismiss();
         this.showMessage('Usuario o contraseña incorrectos');
       }
     });
-    loadingIndicator.dismiss();
   }
 
   private showMessage(message: string) {
@@ -71,7 +74,7 @@ export class LoginPage {
   }
 
   private validateInputs() {
-    return this.user.email.trim().length > 0 && this.user.password.trim().length > 0
+    return emptyTexts(this.user.email, this.user.password)
       && this.user.email.includes('@') && this.user.email.includes('.');
   }
 

@@ -45,9 +45,9 @@ export class ChannelService {
    * @param token - The authorization token.
    * @returns An Observable of type ResponseApi.
    */
-  getAllChannels(playListId: string, token: string): Observable<ResponseApi> {
+  getAllChannels(playListId: string, token: string, page: number = 1): Observable<ResponseApi> {
     this.httpHeaders.headers['Authorization'] = `Bearer ${token}`;
-    return this.http.get<ResponseApi>(`${this.API_URL}/GetChannelsByPlaylist/${playListId}/`, { headers: this.httpHeaders.headers });
+    return this.http.get<ResponseApi>(`${this.API_URL}/GetChannelsByPlaylist/${playListId}/${page}`, { headers: this.httpHeaders.headers });
   }
 
   /**

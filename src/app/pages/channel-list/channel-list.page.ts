@@ -1,15 +1,14 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, NgZone, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Storage } from '@ionic/storage';
 import { User } from 'src/app/models/IUser.model';
 import { addIcons } from 'ionicons';
-import { addCircleOutline, arrowBackOutline, chevronUpCircle, cloudUploadOutline, downloadOutline, navigate, reorderFourOutline, saveOutline, trashOutline } from 'ionicons/icons';
+import { addCircleOutline, arrowBackOutline, chevronUpCircle, cloudUploadOutline, downloadOutline, reorderFourOutline, saveOutline, trashOutline } from 'ionicons/icons';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Channel } from 'src/app/models/IChannel.model';
 import { ChannelService } from 'src/app/services/channel.service';
-import { PlaylistService } from 'src/app/services/playlist.service';
-import { ItemReorderEventDetail, PopoverController, IonicModule } from '@ionic/angular';
+import { ItemReorderEventDetail, PopoverController, IonicModule, InfiniteScrollCustomEvent } from '@ionic/angular';
 import { CreateChannelComponent } from 'src/app/components/channel/create-channel/create-channel.component';
 
 @Component({
@@ -24,6 +23,9 @@ export class ChannelListPage implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef = {} as ElementRef;
   popover: HTMLIonPopoverElement = {} as HTMLIonPopoverElement;
   channels: Channel[] = [];
+  currentPage: number = 1;
+  pageInfo = {} as any;
+  allCharged: boolean = false;
 
   groups: string[] = [];
 
@@ -46,23 +48,22 @@ export class ChannelListPage implements OnInit {
 
   alertDeleteButtons = [
     {
-      text: 'Si',
-      handler: () => {
+      text: 'Si', handler: () => {
         this.deleteChannel();
         this.isDeletingAlert = false;
       }
     },
     {
-      text: 'No',
-      handler: () => {
+      text: 'No', handler: () => {
         this.isDeletingAlert = false;
         this.channelToDelete = {} as Channel;
       }
     }
   ];
 
-  constructor(private channelService: ChannelService, private playListService: PlaylistService,
-    private aRoute: ActivatedRoute, private storage: Storage, private router: Router, private popoverController: PopoverController) {
+  constructor(private channelService: ChannelService,
+    private aRoute: ActivatedRoute, private storage: Storage, private router: Router,
+    private popoverController: PopoverController, private zone: NgZone, private cdRef: ChangeDetectorRef) {
     addIcons({
       chevronUpCircle,
       saveOutline,
@@ -76,6 +77,12 @@ export class ChannelListPage implements OnInit {
   }
 
   ngOnInit() {
+    this.chargeInfo();
+  }
+
+  private chargeInfo() {
+    this.allCharged = false;
+    this.user = {} as User;
     this.storage.get('user').then((user) => {
       this.user = user;
       this.aRoute.params.subscribe((params) => {
@@ -87,6 +94,13 @@ export class ChannelListPage implements OnInit {
     });
   }
 
+  onIonInfinite(ev: any) {
+    if (this.pageInfo.totalPages > this.currentPage) this.loadChannels(true); else this.allCharged = true;
+    setTimeout(() => {
+      (ev as InfiniteScrollCustomEvent).target.complete();
+    }, 500);
+  }
+
   onComeBack() {
     this.router.navigate(['playlist']);
   }
@@ -96,15 +110,22 @@ export class ChannelListPage implements OnInit {
     this.messageToast = message;
   }
 
-  loadChannels() {
+  loadChannels(isLoad: boolean = false) {
+    if (isLoad) this.currentPage++; else { this.currentPage = 1; this.allCharged = false; };
+
     if (!this.playListId || !this.user.token) return;
 
-    this.channelService.getAllChannels(this.playListId, this.user.token).subscribe({
+    this.channelService.getAllChannels(this.playListId, this.user.token, this.currentPage).subscribe({
       next: (response) => {
-        this.channels = response.data;
-        this.channels.sort((a, b) => (a.orderList ?? 0) - (b.orderList ?? 0));
-        this.isCharging = false;
-        this.filterChannels();
+        this.zone.run(() => {
+          if (!isLoad && response.data.data.length >= 0) { this.channels = response.data.data } else { this.channels.push(...response.data.data); };
+          this.pageInfo = { ...response.data, data: undefined };
+          this.channels.sort((a, b) => (a.orderList ?? 0) - (b.orderList ?? 0));
+          this.isCharging = false;
+          this.filterChannels();
+
+          this.cdRef.detectChanges();
+        });
       },
       error: (error) => {
         this.isCharging = false;
@@ -231,7 +252,7 @@ export class ChannelListPage implements OnInit {
   }
 
   async changeColors() {
-    while (this.isCharging) {//Revisar si no se entra en un loop infinito------------------------------------------
+    while (this.isCharging) {
       this.currentColorIndex = (this.currentColorIndex + 1) % this.colors.length;
       await new Promise(resolve => setTimeout(resolve, 1000));
     }

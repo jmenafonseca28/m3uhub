@@ -1,5 +1,5 @@
 <ion-header [translucent]="true">
-  <ion-toolbar class="neon">
+  <ion-toolbar>
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
@@ -13,10 +13,11 @@
       <ion-title size="large">Playlist</ion-title>
     </ion-toolbar>
     <ion-title size="large">Playlist</ion-title>
-
   </ion-header>
 
-  <ion-list *ngIf="playlistsList">
+  <ion-progress-bar *ngIf="isLoading" type="indeterminate"></ion-progress-bar>
+
+  <ion-list *ngIf="playlistsList.length !== 0">
     <ion-item *ngFor="let playlist of playlistsList;">
       <ion-card style="width: 100%; background-color: rgb(28, 54, 71);">
         <ion-card-header>
@@ -30,6 +31,12 @@
       </ion-card>
     </ion-item>
   </ion-list>
+
+  <ion-card *ngIf="playlistsList.length === 0" style="width: 95%; background-color: rgb(28, 54, 71);">
+    <ion-card-header>
+      <ion-card-title>No hay playlist</ion-card-title>
+    </ion-card-header>
+  </ion-card>
 
   <ion-fab slot="fixed" horizontal="end" vertical="bottom">
     <ion-fab-button (click)="presentCreatePlaylistPopover()">

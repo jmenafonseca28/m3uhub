@@ -3,11 +3,17 @@
   <ion-content>
     <ion-list>
       <ion-menu-toggle>
-        <ion-item button [routerLink]="['/homepage']">
+        <!-- <ion-item button [routerLink]="['/homepage']">
           <ion-label>Inicio</ion-label>
-        </ion-item>
+        </ion-item> -->
         <ion-item button [routerLink]="['/playlist']">
-          <ion-label>Gestionar Playlist</ion-label>
+          <ion-label>Playlists</ion-label>
+        </ion-item>
+        <ion-item button [routerLink]="['/user-info']">
+          <ion-label>Cuenta</ion-label>
+        </ion-item>
+        <ion-item button [routerLink]="['/about']">
+          <ion-label>Acerca de</ion-label>
         </ion-item>
         <ion-item button (click)="logout()">
           <ion-label>Cerrar de sesión</ion-label>

@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonMenuButton, IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonList, IonItem, IonCard, IonCardContent, IonButton, IonFab, IonFabButton, IonIcon, IonAlert, IonCardHeader, IonCardTitle } from '@ionic/angular/standalone';
+import { IonProgressBar, IonMenuButton, IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonList, IonItem, IonCard, IonCardContent, IonButton, IonFab, IonFabButton, IonIcon, IonAlert, IonCardHeader, IonCardTitle } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { add, lockClosedOutline } from 'ionicons/icons';
 import { Playlist } from 'src/app/models/IPlaylist.model';
 import { User } from 'src/app/models/IUser.model';
 import { Router } from '@angular/router';
 import { PlaylistService } from 'src/app/services/playlist.service';
-import { PopoverController } from '@ionic/angular';
+import { PopoverController, ViewWillEnter } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { CreatePlaylistComponent } from 'src/app/components/playlist/create-playlist/create-playlist.component';
 import { EditPlaylistComponent } from 'src/app/components/playlist/edit-playlist/edit-playlist.component';
@@ -20,9 +20,9 @@ import { EditPlaylistComponent } from 'src/app/components/playlist/edit-playlist
   standalone: true,
   imports: [IonCardTitle, IonCardHeader, IonAlert, IonIcon, IonFabButton, IonFab, IonButton, IonCardContent,
     IonCard, IonItem, IonList, IonButtons, IonContent, IonHeader, IonTitle,
-    IonToolbar, CommonModule, FormsModule, IonMenuButton]
+    IonToolbar, CommonModule, FormsModule, IonMenuButton, IonProgressBar]
 })
-export class PlaylistPage implements OnInit {
+export class PlaylistPage implements OnInit, ViewWillEnter {
 
   popover: HTMLIonPopoverElement = {} as HTMLIonPopoverElement;
   playlistsList: Playlist[] = [];
@@ -36,6 +36,8 @@ export class PlaylistPage implements OnInit {
   isAlertOpen = false;
 
   errorMessage: string = '';
+
+  isLoading = false;
 
   deletePlaylistButtons = [
     {
@@ -55,26 +57,41 @@ export class PlaylistPage implements OnInit {
   ];
 
   constructor(private router: Router, private playlistService: PlaylistService
-    , private popoverController: PopoverController, private storage: Storage) {
+    , private popoverController: PopoverController, private storage: Storage,
+    private cdRef: ChangeDetectorRef, private zone: NgZone) {
     addIcons({ add, lockClosedOutline });
   }
 
   ngOnInit() {
-    this.storage.get('user').then((user) => {
+    this.loadUserInformation();
+  }
+
+  ionViewWillEnter(): void {
+    this.loadUserInformation();
+  }
+
+  private loadUserInformation() {
+    this.user = {} as User;
+    this.storage.get('user').then((user: User) => {
       this.user = user;
       this.loadPlaylists();
     });
   }
 
   loadPlaylists() {
+    this.isLoading = true;
     if (!this.user.id || !this.user.token) return;
 
     this.playlistService.getAllPlaylists(this.user.id, this.user.token).subscribe((response) => {
-      this.playlistsList = response.data;
-      if (this.playlistsList && this.playlistsList.length === 0) {
-        this.errorMessage = 'No se encontraron listas de reproducción';
-        this.setOpen(true);
-      }
+      this.zone.run(() => {
+        this.playlistsList = response.data;
+        if (this.playlistsList && this.playlistsList.length === 0) {
+          this.errorMessage = 'No se encontraron listas de reproducción';
+          this.setOpen(true);
+        }
+        this.cdRef.detectChanges();
+        this.isLoading = false;
+      });
     });
   }
 

@@ -17,31 +17,31 @@
     <ion-card-header>
       <ion-card-title>Todos los canales disponibles</ion-card-title>
       <ion-card-subtitle>{{user.name+' '+user.lastName}}</ion-card-subtitle>
+      <ion-card-subtitle>Canales: {{pageInfo.count}}</ion-card-subtitle>
     </ion-card-header>
     <ion-card-content>
       <ion-progress-bar *ngIf="isCharging" type="indeterminate" [color]="colors[currentColorIndex]"></ion-progress-bar>
 
       <ion-button fill="outline" (click)="onComeBack()"><ion-icon slot="icon-only"
           name="arrow-back-outline"></ion-icon></ion-button>
-      <ion-list>
-        <ion-item>
-          <ion-label>Filtrar por Grupo</ion-label>
-          <ion-select [(ngModel)]="selectedGroups" multiple="true" (ionChange)="filterChannels()">
-            <ion-select-option *ngFor="let group of groups" [value]="group">{{ group }}</ion-select-option>
-          </ion-select>
-        </ion-item>
-      </ion-list>
+      <div>
+        <ion-select placeholder="Filtrar por Grupo" [(ngModel)]="selectedGroups" multiple="true"
+          (ionChange)="filterChannels()">
+          <ion-select-option *ngFor="let group of groups" [value]="group">{{ group }}</ion-select-option>
+        </ion-select>
+      </div>
+
 
       <ion-list>
         <ion-reorder-group [disabled]="isDisabled" (ionItemReorder)="handleReorder($any($event))">
-          <ion-item
-            *ngFor="let channelInfo of filteredChannels;"><!-- [button]="true" (click)="openChannel(channelInfo)" -->
+          <ion-item *ngFor="let channelInfo of filteredChannels;">
+            <!-- [button]="true" (click)="openChannel(channelInfo)" -->
             <ion-thumbnail slot="start">
               <img alt="Logo" src="{{channelInfo.logo}}" />
             </ion-thumbnail>
             <ion-label>{{channelInfo.title}}</ion-label>
             <ion-button slot="end" (click)="openChannel(channelInfo)">Ver</ion-button>
-            <ion-button slot="end" (click)="setChannelToDelete(channelInfo)" *ngIf="isDeleting"><ion-icon
+            <ion-button color="danger" slot="end" (click)="setChannelToDelete(channelInfo)" *ngIf="isDeleting"><ion-icon
                 name="trash-outline"></ion-icon></ion-button>
             <ion-reorder slot="end"></ion-reorder>
           </ion-item>
@@ -49,6 +49,17 @@
       </ion-list>
     </ion-card-content>
   </ion-card>
+
+  <ion-card *ngIf="filteredChannels.length === 0" style="width: 95%; background-color: rgb(28, 54, 71);">
+    <ion-card-header>
+      <ion-card-title>No hay canales</ion-card-title>
+    </ion-card-header>
+  </ion-card>
+
+  <ion-infinite-scroll  (ionInfinite)="onIonInfinite($event)">
+    <ion-infinite-scroll-content loadingText="Cargando..." loadingSpinner="bubbles"></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>

@@ -1,29 +1,31 @@
-<ion-header [translucent]="true" class="dark-theme">
+<ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title class="text-white">
+    <ion-title>
       Iniciar sesión
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="login-content dark-theme" [fullscreen]="true">
-  <div class="login-container neon-border">
-    <ion-card class="color4">
-      <ion-card-header class="header">
-        <ion-card-title class="color2 text-white">M3UHUB</ion-card-title>
-        <ion-card-subtitle class="color2 text-white">Ingrese sus datos</ion-card-subtitle>
+<ion-content [fullscreen]="true">
+  <div class="login-container">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>M3UHUB</ion-card-title>
+        <ion-card-subtitle>Ingrese sus datos</ion-card-subtitle>
       </ion-card-header>
 
       <ion-card-content>
         <div class="ion-padding">
           <ion-item class="text-white">
-            <ion-label position="floating">Correo electr&oacute;nico</ion-label>
-            <ion-input type="email" name="email" [(ngModel)]="user.email"></ion-input>
+            <!--<ion-label position="floating">Correo electr&oacute;nico</ion-label> -->
+            <ion-input type="email" name="email" [(ngModel)]="user.email" label="Correo electrónico"
+              labelPlacement="floating" placeholder="Ingresa el correo"></ion-input>
           </ion-item>
 
           <ion-item class="text-white">
-            <ion-label position="floating">Contrase&ntilde;a</ion-label>
-            <ion-input type="password" name="password" [(ngModel)]="user.password"></ion-input>
+            <!-- <ion-label position="floating">Contrase&ntilde;a</ion-label> -->
+            <ion-input type="password" name="password" [(ngModel)]="user.password" label="Contrase&ntilde;a"
+              labelPlacement="floating" placeholder="Ingrese la contraseña"></ion-input>
           </ion-item>
 
           <ion-button expand="block" color="primary" (click)="login()">
@@ -37,7 +39,7 @@
         </div>
       </ion-card-content>
     </ion-card>
-    <ion-alert header="Ops.." subHeader="Parece que algo salió mal. Inténtalo de nuevo." [message]="errorMessage"
-      [buttons]="alertButtons" [isOpen]="isAlertOpen" (didDismiss)="setOpen(false)"></ion-alert>
   </div>
+  <ion-alert header="Ops.." subHeader="Parece que algo salió mal. Inténtalo de nuevo." [message]="errorMessage"
+    [buttons]="alertButtons" [isOpen]="isAlertOpen" (didDismiss)="setOpen(false)"></ion-alert>
 </ion-content>
