@@ -5,6 +5,7 @@ import { UserBase } from '../models/IUserBase.model';
 import { User } from '../models/IUser.model';
 import { ConfigService } from '../config/ConfigService';
 import { ResponseApi } from '../models/IResponseApi.model';
+import { Password } from '../models/IPassword.model';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,8 @@ export class AuthService {
   private httpHeaders = {
     headers: {
       'Content-Type': 'application/json',
-      'Accept': 'application/json'
+      'Accept': 'application/json',
+      'Authorization': ''
     },
     responseType: 'json'
   };
@@ -42,5 +44,15 @@ export class AuthService {
    */
   register(user: User): Observable<ResponseApi> {
     return this.http.post<ResponseApi>(`${this.API_URL}/register`, user, { headers: this.httpHeaders.headers });
+  }
+
+  changePassword(idUser: string, pass: Password, token: string): Observable<ResponseApi> {
+    this.httpHeaders.headers['Authorization'] = `Bearer ${token}`;
+    return this.http.patch<ResponseApi>(`${this.API_URL}/changePassword/${idUser}`, pass, { headers: this.httpHeaders.headers });
+  };
+
+  updateProfile(idUser: string, user: User, token: string): Observable<ResponseApi> {
+    this.httpHeaders.headers['Authorization'] = `Bearer ${token}`;
+    return this.http.put<ResponseApi>(`${this.API_URL}/update/${idUser}`, user, { headers: this.httpHeaders.headers });
   }
 }

@@ -17,21 +17,27 @@
 
   <ion-card>
     <ion-card-header>
+      <ion-button fill="clear" shape="round" (click)="toggleUpdateProfile()">
+        <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+      </ion-button>
       <ion-card-title>Perfil del usuario</ion-card-title>
     </ion-card-header>
     <ion-card-content>
       <ion-item>
-        <ion-label>Nombre</ion-label>
-        <ion-text>{{user.name}}</ion-text>
+        <ion-input label="Nombre" labelPlacement="floating" placeholder="Ingrese su nombre" [(ngModel)]="user.name"
+          [disabled]="isUpdateProfile"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label>Apellidos</ion-label>
-        <ion-text>{{user.lastName}}</ion-text>
+        <ion-input label="Apellidos" labelPlacement="floating" placeholder="Ingrese sus apellidos"
+          [(ngModel)]="user.lastName" [disabled]="isUpdateProfile"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label>Correo</ion-label>
-        <ion-text>{{user.email}}</ion-text>
+        <ion-input label="Correo" labelPlacement="floating" placeholder="Ingrese su correo" [(ngModel)]="user.email"
+          [disabled]="isUpdateProfile"></ion-input>
       </ion-item>
+      <div [hidden]="isUpdateProfile">
+        <ion-button expand="block" (click)="updateProfile()" fill="clear">Actualizar</ion-button>
+      </div>
     </ion-card-content>
   </ion-card>
 
@@ -52,16 +58,18 @@
         <ion-input label="Contraseña anterior" labelPlacement="floating" placeholder="Ingrese la contraseña"
           [(ngModel)]="passChange.oldPass"></ion-input>
       </ion-item>
-      <ion-button expand="block" (click)="changePassword()">Cambiar contraseña</ion-button>
+      <ion-button expand="block" (click)="changePassword()" fill="clear">Cambiar contraseña</ion-button>
     </ion-card-content>
   </ion-card>
 
-  <ion-card button="true" (click)="any()">
+  <!-- <ion-card button="true" (click)="any()">
     <ion-card-header>
       <ion-card-title>Cerrar sesión</ion-card-title>
     </ion-card-header>
     <ion-card-content>
     </ion-card-content>
-  </ion-card>
+  </ion-card> -->
 
+  <ion-alert [header]="header" [subHeader]="subHeader" [message]="message" [buttons]="alertButtons"
+    [isOpen]="isAlertOpen" (didDismiss)="setOpen(false)"></ion-alert>
 </ion-content>
