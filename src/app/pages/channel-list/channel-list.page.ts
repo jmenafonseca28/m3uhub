@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Storage } from '@ionic/storage';
 import { User } from 'src/app/models/IUser.model';
 import { addIcons } from 'ionicons';
-import { addCircleOutline, arrowBackOutline, chevronUpCircle, cloudUploadOutline, downloadOutline, reorderFourOutline, saveOutline, trashOutline } from 'ionicons/icons';
+import { addCircleOutline, arrowBackOutline, chevronUpCircle, cloudUploadOutline, downloadOutline, helpCircleOutline, reorderFourOutline, saveOutline, trashOutline } from 'ionicons/icons';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Channel } from 'src/app/models/IChannel.model';
 import { ChannelService } from 'src/app/services/channel.service';
@@ -72,7 +72,8 @@ export class ChannelListPage implements OnInit {
       addCircleOutline,
       trashOutline,
       cloudUploadOutline,
-      arrowBackOutline
+      arrowBackOutline,
+      helpCircleOutline
     });
   }
 
@@ -201,6 +202,7 @@ export class ChannelListPage implements OnInit {
       translucent: true,
       backdropDismiss: true,
       animated: true,
+      showBackdrop: false
     });
     this.popover.componentProps = { playlistId: this.playListId };
     this.popover.onDidDismiss().then(() => {
@@ -276,5 +278,9 @@ export class ChannelListPage implements OnInit {
     this.filteredChannels = this.channels.filter(channel =>
       this.selectedGroups.includes(channel.groupTitle || '')
     );
+  }
+
+  showHelp(){
+    //Mostrar toda los popovers de ayuda
   }
 }

@@ -7,8 +7,8 @@
   <div>
     <div class="custom-form">
       <ion-item class="custom-item text-white">
-        <ion-label position="floating" class="text-white">Nombre de la Playlist</ion-label>
-        <ion-input type="text" [(ngModel)]="playlist.name"></ion-input>
+        <ion-input type="text" name="playlistName" [(ngModel)]="playlist.name" label="Nombre de la Playlist"
+        labelPlacement="floating" placeholder="Ingresa el nombre de la playlist"></ion-input>
       </ion-item>
       <ion-button class="custom-button" expand="block" (click)="closePopover()">Cerrar</ion-button>
       <ion-button class="custom-button" expand="block" (click)="saveChanges()">Guardar</ion-button>
